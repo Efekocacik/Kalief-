@@ -1,18 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Loader2, Bot, ExternalLink, ChevronLeft, ChevronRight, Sparkles, ShieldCheck, Zap, Star } from 'lucide-react';
+import { Send, Loader2, Bot, ExternalLink, Sparkles, ShieldCheck, Star } from 'lucide-react';
 
 export default function ProductShowcaseAI() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [activeImage, setActiveImage] = useState(0);
   const messagesEndRef = useRef(null);
 
-  // --- RESİM DOSYALARI (Public klasöründe olmalı) ---
-  const productImages = [
-    "/goz-masaji-hero.jpg", 
-    "/goz-masaji-ic.jpg"
-  ];
+  // --- RESİM DOSYASI (Tek resme düşürüldü) ---
+  const productImage = "/goz-masaji-hero.jpg";
 
   const storeConfig = {
     storeName: "Kalief",
@@ -20,7 +16,6 @@ export default function ProductShowcaseAI() {
     appLink: "https://www.kalidekor.com",
     productName: "SmartRelax Göz Terapi Cihazı",
     model: "MZ-EM11",
-    // NOT: Fiyat bilgisi tamamen kaldırıldı.
     
     fullSpecs: {
       intro: "MZ-EM11, evde profesyonel spa deneyimi sunan, estetik ve sağlık teknolojisini birleştiren yeni nesil bir cihazdır.",
@@ -49,20 +44,11 @@ export default function ProductShowcaseAI() {
     "Garanti koşulları"
   ];
 
-  // --- RESİM GALERİSİ FONKSİYONLARI ---
-  const nextImage = () => {
-    setActiveImage((prev) => (prev + 1) % productImages.length);
-  };
-
-  const prevImage = () => {
-    setActiveImage((prev) => (prev - 1 + productImages.length) % productImages.length);
-  };
-
   // --- NLP (DOĞAL DİL İŞLEME) MANTIĞI ---
   const analyzeQuestion = (text) => {
     const lowerText = text.toLowerCase();
 
-    // 1. ESTETİK VE GÜZELLİK (Özel Bölüm)
+    // 1. ESTETİK VE GÜZELLİK
     if (lowerText.includes('estetik') || lowerText.includes('güzellik') || lowerText.includes('kırışıklık') || lowerText.includes('bakım')) {
       return `✨ **Güzellik ve Bakım Etkisi**\n\nSmartRelax, sadece ağrıları gidermekle kalmaz, estetik faydalar da sunar:\n\n🌸 **Göz Altı Torbaları:** Soğuk kompres modu şişkinlikleri indirir.\n🌸 **Koyu Halkalar:** Isı terapisi kan dolaşımını hızlandırarak morlukları azaltır.\n🌸 **Kaz Ayakları:** Titreşim masajı cilt elastikiyetini artırır ve ince çizgilerin görünümünü hafifletir.\n\nDüzenli kullanımda daha canlı ve dinç bir bakış sağlar!`;
     }
@@ -72,7 +58,7 @@ export default function ProductShowcaseAI() {
       return `✨ **SmartRelax MZ-EM11** profesyonel bir bakım cihazıdır.\n\nÖne Çıkan Özellikler:\n1️⃣ **4D Hava Basıncı:** Şakaklara nazikçe baskı yapar.\n2️⃣ **Titreşim:** Kan dolaşımını hızlandırır.\n3️⃣ **Sıcak/Soğuk Kompres:** Gözleri dinlendirir.\n4️⃣ **Bluetooth:** Bakım yaparken müzik dinleyebilirsiniz.\n\nGünde 15 dakika ile kendinizi yenileyin.`;
     }
 
-    // 3. FİYAT SORULARI (Rakam vermeden yönlendirme)
+    // 3. FİYAT SORULARI
     if (lowerText.includes('fiyat') || lowerText.includes('kaç') || lowerText.includes('tl') || lowerText.includes('ne kadar')) {
       return `En güncel fiyat bilgisi ve size özel dönemsel kampanyalarımız için lütfen resmi web sitemizi ziyaret edin: [${storeConfig.website}](${storeConfig.appLink}) \n\nKaliteden ödün vermeden, erişilebilir en iyi deneyimi sunmaya özen gösteriyoruz. 💎`;
     }
@@ -182,50 +168,37 @@ export default function ProductShowcaseAI() {
       {/* 2. ORTA ALAN */}
       <div className="flex-1 overflow-y-auto bg-gray-50">
         
-        {/* A. HERO SECTION - FİYATSIZ & ŞIK */}
-        <div className="bg-white pb-4 rounded-b-[2rem] shadow-sm mb-4 relative group">
-            <div className="relative w-full h-64 bg-white flex justify-center items-center">
-                {/* Resim */}
-                <img 
-                    src={productImages[activeImage]} 
-                    alt="Ürün Görseli" 
-                    className="h-full w-auto object-contain p-4"
-                />
-                
-                {/* Yön Okları */}
-                <button onClick={prevImage} className="absolute left-2 top-1/2 -translate-y-1/2 bg-gray-100/80 p-1.5 rounded-full shadow hover:bg-white transition text-gray-800">
-                    <ChevronLeft size={20}/>
-                </button>
-                <button onClick={nextImage} className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-100/80 p-1.5 rounded-full shadow hover:bg-white transition text-gray-800">
-                    <ChevronRight size={20}/>
-                </button>
+        {/* A. HERO SECTION - YENİLENMİŞ & BÜYÜTÜLMÜŞ TASARIM */}
+        <div className="bg-white pb-6 rounded-b-[2.5rem] shadow-sm mb-4 relative overflow-hidden">
+            
+            {/* Arka plan dekoratif gradient (isteğe bağlı, çok hafif) */}
+            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-gray-50 via-white to-white opacity-60 z-0 pointer-events-none"></div>
 
-                {/* Dots */}
-                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
-                    {productImages.map((_, idx) => (
-                        <div key={idx} className={`w-1.5 h-1.5 rounded-full transition-all ${activeImage === idx ? 'bg-black w-3' : 'bg-gray-300'}`} />
-                    ))}
-                </div>
+            <div className="relative w-full h-80 sm:h-96 flex justify-center items-center z-10 p-6">
+                {/* Resim - Büyütüldü ve Gölge Eklendi */}
+                <img 
+                    src={productImage} 
+                    alt="Ürün Görseli" 
+                    className="h-full w-auto object-contain drop-shadow-xl hover:scale-105 transition-transform duration-700 ease-out"
+                />
             </div>
 
-            {/* Başlık ve Rozetler (Fiyat Yok) */}
-            <div className="px-5 mt-2">
-                <div className="flex justify-between items-end">
-                    <div>
-                        <h1 className="text-xl font-bold text-gray-900 leading-tight">{storeConfig.productName}</h1>
-                        <p className="text-xs text-gray-400 mt-1 font-medium tracking-wide uppercase">{storeConfig.model} • PROFESSIONAL SERIES</p>
-                    </div>
+            {/* Başlık ve Rozetler */}
+            <div className="px-6 mt-2 relative z-10">
+                <div className="flex flex-col items-center text-center">
+                    <h1 className="text-2xl font-bold text-gray-900 leading-tight">{storeConfig.productName}</h1>
+                    <p className="text-xs text-gray-400 mt-1.5 font-medium tracking-widest uppercase">{storeConfig.model} • PROFESSIONAL SERIES</p>
                 </div>
                 
-                {/* Premium Rozetler */}
-                <div className="flex gap-2 mt-4 overflow-x-auto no-scrollbar">
-                    <span className="text-[10px] font-semibold bg-black text-white px-3 py-1.5 rounded-full flex items-center gap-1 whitespace-nowrap shadow-md">
+                {/* Premium Rozetler - Ortalanmış */}
+                <div className="flex justify-center gap-3 mt-5 flex-wrap">
+                    <span className="text-[10px] font-semibold bg-black text-white px-3 py-1.5 rounded-full flex items-center gap-1 shadow-md hover:bg-gray-800 transition cursor-default">
                         <Star size={10} className="fill-white" /> Premium Series
                     </span>
-                    <span className="text-[10px] font-semibold bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full flex items-center gap-1 whitespace-nowrap border border-gray-200">
+                    <span className="text-[10px] font-semibold bg-white text-gray-600 px-3 py-1.5 rounded-full flex items-center gap-1 border border-gray-200 shadow-sm">
                         <ShieldCheck size={12} /> 1 Yıl Garanti
                     </span>
-                    <span className="text-[10px] font-bold text-green-700 bg-green-50 border border-green-100 px-3 py-1.5 rounded-full whitespace-nowrap">
+                    <span className="text-[10px] font-bold text-green-700 bg-green-50 border border-green-100 px-3 py-1.5 rounded-full shadow-sm">
                         Ücretsiz Kargo
                     </span>
                 </div>
