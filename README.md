@@ -27,3 +27,5 @@ npm run build
 
 Bu proje Vercel'e deploy edilmek üzere hazırlanmıştır.
 
+
+
