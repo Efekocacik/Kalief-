@@ -1,17 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Loader2, Bot, ExternalLink, ChevronLeft, ChevronRight, Sparkles, ShieldCheck, Zap } from 'lucide-react';
+import { Send, Loader2, Bot, ExternalLink, Sparkles, ShieldCheck, Star } from 'lucide-react';
 
 export default function ProductShowcaseAI() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [activeImage, setActiveImage] = useState(0);
   const messagesEndRef = useRef(null);
 
-  // --- ÖNEMLİ: RESİM AYARLARI ---
+  // --- RESİM AYARLARI ---
   const productImages = [
-    "/goz-masaji-hero.jpg",
-    "/goz-masaji-on.jpeg"
+    "/goz-masaji-hero.jpg" 
   ];
 
   const storeConfig = {
@@ -20,16 +18,15 @@ export default function ProductShowcaseAI() {
     appLink: "https://www.kalidekor.com",
     productName: "SmartRelax Göz Terapi Cihazı",
     model: "MZ-EM11",
-    price: "4.500 TL",
     
-    // Satış Odaklı Veriler
+    // Satış Odaklı Veriler (FİYAT VE RAKİP YOK)
     fullSpecs: {
-      intro: "MZ-EM11, sadece bir masaj aleti değil, evde profesyonel spa deneyimidir. 4D hava yastıkları ve akıllı ısı teknolojisiyle göz çevrenizi yeniler.",
+      intro: "MZ-EM11, evde profesyonel spa deneyimi sunan yeni nesil bir terapi cihazıdır.",
       features: "Sıcak/Soğuk Kompres, 4D Hava Basıncı, Akupunktur Titreşimi, Bluetooth Müzik",
-      benefits: "Migren ağrılarını dindirir, göz yorgunluğunu alır, göz altı torbalarını ve koyu halkaları giderir.",
-      battery: "2000mAh (Tek şarjla 1 hafta kullanım)",
+      benefits: "Migren ağrılarını dindirir, göz yorgunluğunu alır, uyku kalitesini artırır.",
+      battery: "2000mAh (Tek şarjla uzun kullanım)",
       warranty: "1 Yıl Birebir Değişim Garantisi",
-      shipping: "Ücretsiz ve Hızlı Kargo"
+      shipping: "Ücretsiz Kargo & Hızlı Teslimat"
     }
   };
 
@@ -44,61 +41,48 @@ export default function ProductShowcaseAI() {
   const quickQuestions = [
     "Ürün özellikleri neler?",
     "Migrene iyi gelir mi?",
-    "Estetik ve güzellik",
-    "Neden sizi tercih etmeliyim?",
+    "Neden Kalief'i seçmeliyim?",
     "Sıcak/Soğuk modu nasıl?",
-    "Kargo ve Garanti"
+    "Garanti süreci nasıl?"
   ];
-
-  // --- RESİM GALERİSİ FONKSİYONLARI ---
-  const nextImage = () => {
-    setActiveImage((prev) => (prev + 1) % productImages.length);
-  };
-
-  const prevImage = () => {
-    setActiveImage((prev) => (prev - 1 + productImages.length) % productImages.length);
-  };
 
   // --- NLP (DOĞAL DİL İŞLEME) MANTIĞI ---
   const analyzeQuestion = (text) => {
     const lowerText = text.toLowerCase();
 
-    // 1. ÜRÜN ÖZELLİKLERİ VE TANITIM (İstenilen detaylı ve ikna edici cevap)
+    // 1. ÜRÜN ÖZELLİKLERİ VE TANITIM
     if (lowerText.includes('özellik') || lowerText.includes('nasıl bir ürün') || lowerText.includes('tanıt') || lowerText.includes('nedir')) {
-      return `✨ **SmartRelax MZ-EM11** sıradan bir masaj aleti değildir.\n\nBu cihaz, göz çevresindeki akupunktur noktalarına **4 farklı yöntemle** bakım yapar:\n1️⃣ **Hava Basıncı:** Şakaklara nazikçe baskı yaparak stresi alır.\n2️⃣ **Titreşim:** Kan dolaşımını hızlandırır.\n3️⃣ **Sıcak/Soğuk Kompres:** Gözleri dinlendirir ve şişlikleri indirir.\n4️⃣ **Bluetooth:** Masaj yaparken müzik dinleyebilirsiniz.\n\n💡 **Neden Almalısınız?** Göz yorgunluğu, migren veya uykusuzluk çekiyorsanız, günde sadece 15 dakikada ilaçsız rahatlama sağlar. Kendinize yapacağınız en iyi yatırımdır.`;
+      return `✨ **SmartRelax MZ-EM11** sıradan bir masaj aleti değildir.\n\nBu cihaz, göz çevresindeki akupunktur noktalarına **4 farklı yöntemle** bakım yapar:\n1️⃣ **Hava Basıncı:** Şakaklara nazikçe baskı yaparak stresi alır.\n2️⃣ **Titreşim:** Kan dolaşımını hızlandırır.\n3️⃣ **Sıcak/Soğuk Kompres:** Gözleri dinlendirir ve şişlikleri indirir.\n4️⃣ **Bluetooth:** Masaj yaparken müzik dinleyebilirsiniz.\n\n💡 **Faydası:** Günün yorgunluğunu 15 dakikada atmanızı sağlar.`;
     }
 
-    // 2. FİYAT VE REKABET (Kullanıcı sorarsa devreye girer)
-    if (lowerText.includes('fiyat') || lowerText.includes('kaç') || lowerText.includes('neden') && lowerText.includes('tercih')) {
-      return `Ürünümüz şu an **${storeConfig.price}** fiyatla satıştadır. 🏷️\n\nAçıkça belirtmek isteriz ki; aynı özelliklere sahip muadil ürünler pazar yerlerinde (Trendyol vb.) **6.500 TL** bandında satılmaktadır. Biz doğrudan üretici/ithalatçı avantajıyla **%30 daha uygun fiyat** sunuyoruz. Kalite aynı, fiyat daha erişilebilir. ✅`;
+    // 2. NEDEN BİZ (PRESTİJ ODAKLI)
+    if (lowerText.includes('neden') || lowerText.includes('fark') || lowerText.includes('tercih') || lowerText.includes('seçmeliyim')) {
+      return `🏆 **Neden Kalief?**\n\nBiz sadece bir ürün değil, **kesintisiz bir deneyim** sunuyoruz.\n\n✅ **Üstün Kalite:** Cihazımızda kullanılan "Soft-Touch" medikal yüzey cildinizi tahriş etmez.\n✅ **Birebir Değişim:** Ürünümüze o kadar güveniyoruz ki, teknik sorunlarda tamirle uğraştırmıyor, direkt yenisiyle değiştiriyoruz.\n✅ **Muhatap Garantisi:** Satış sonrası her an ulaşabileceğiniz destek ekibimiz yanınızda.`;
     }
 
+    // 3. FİYAT SORULARI (YÖNLENDİRME ODAKLI)
+    if (lowerText.includes('fiyat') || lowerText.includes('kaç') || lowerText.includes('tl') || lowerText.includes('ne kadar')) {
+      return `En güncel fiyat bilgisi ve size özel kampanyalarımız için lütfen resmi web sitemizi ziyaret edin: [${storeConfig.website}](${storeConfig.appLink}) \n\nKaliteden ödün vermeden, erişilebilir en iyi fiyatı sunmaya özen gösteriyoruz. 💎`;
+    }
+
+    // 4. MİGREN VE SAĞLIK
     if (lowerText.includes('migren') || lowerText.includes('baş ağrısı') || lowerText.includes('ağrı')) {
-      return `Kesinlikle! 🧠 Cihazın iç kısmındaki metal başlıklar (resimlerde görebilirsiniz) ve hava yastıkları, şakaklarınıza ritmik masaj yapar. Bu teknik, migren ataklarını hafifletmek ve gerilim tipi baş ağrılarını ilaçsız gidermek için özel olarak tasarlanmıştır.`;
+      return `Kesinlikle! 🧠 Cihazın şakak bölgesine uyguladığı ritmik hava basıncı ve ısı terapisi, migren ataklarını hafifletmek ve gerilim tipi baş ağrılarını ilaçsız rahatlatmak için özel olarak tasarlanmıştır.`;
     }
 
-    if (lowerText.includes('estetik') || lowerText.includes('güzellik') || lowerText.includes('guzellik')) {
-      return `Evet, kullanılır! ✨ Düzenli kullanımda göz çevresi kırışıklıklarını, kaz ayaklarını ve göz altı torbalarına iyi gelir. Cihazın masaj ve kompres özellikleri sayesinde cilt elastikiyetini artırır ve yaşlanma belirtilerini azaltır.`;
-    }
-
-    if (lowerText.includes('torba') || lowerText.includes('halka') || lowerText.includes('morluk')) {
-      return `Evet, etkilidir. 👁️ Soğuk kompres modumuz kılcal damarları daraltarak göz altı şişliklerini indirirken, sıcak mod kan dolaşımını artırarak koyu halkaların (morlukların) renginin açılmasına yardımcı olur.`;
-    }
-
+    // 5. TEKNİK (SICAK/SOĞUK)
     if (lowerText.includes('sıcak') || lowerText.includes('soğuk')) {
-      return `Cihazımız **Dual-Effect** teknolojisine sahiptir. 🌡️❄️ Tek tuşla modu değiştirebilirsiniz. Sabahları şiş gözleri indirmek için SOĞUK, akşamları yorgunluğu atmak ve uykuya geçişi kolaylaştırmak için SICAK modu öneriyoruz.`;
+      return `Cihazımız **Dual-Effect** teknolojisine sahiptir. 🌡️❄️\n\n• **Soğuk Mod:** Sabahları göz şişkinliğini ve torbaları indirmek için idealdir.\n• **Sıcak Mod:** Akşamları göz kaslarını gevşetmek ve uykuya geçişi kolaylaştırmak için kullanılır.`;
     }
 
-    if (lowerText.includes('pil') || lowerText.includes('şarj')) {
-      return `Cihaz 2000mAh güçlü bir bataryaya sahiptir. 🔋 Type-C (telefon şarjı) ile şarj olur. Günde 15 dk kullanımla şarjı yaklaşık **1 hafta** gider. Kablo derdi olmadan her yerde kullanabilirsiniz.`;
+    // 6. KARGO VE GARANTİ
+    if (lowerText.includes('garanti') || lowerText.includes('kargo') || lowerText.includes('iade')) {
+      return `📦 **Kargo:** Tüm Türkiye'ye ÜCRETSİZ ve hızlı kargo ile gönderim sağlıyoruz.\n🛡️ **Garanti:** 1 yıl Kalief garantisi altındasınız. Herhangi bir üretim hatasında **birebir değişim** yapıyoruz. Müşteri memnuniyeti önceliğimizdir.`;
     }
 
-    if (lowerText.includes('garanti') || lowerText.includes('kargo')) {
-      return `📦 **Kargo:** Tüm Türkiye'ye ücretsizdir ve 24 saatte kargolanır.\n🛡️ **Garanti:** Ürünümüz 1 yıl Kalief garantilidir. Herhangi bir teknik sorunda onarım değil, **birebir değişim** yapıyoruz.`;
-    }
-
+    // 7. SATIN ALMA
     if (lowerText.includes('satın') || lowerText.includes('almak')) {
-      return `Harika bir karar! 🎉 Ürünü güvenle sipariş etmek için: [${storeConfig.website}](${storeConfig.appLink}) adresini ziyaret edebilirsiniz.`;
+      return `Harika bir seçim! 🎉 Kendinize yapacağınız en iyi yatırım olacak. Güvenle sipariş vermek için hemen tıklayın: [${storeConfig.website}](${storeConfig.appLink})`;
     }
 
     return null;
@@ -112,7 +96,6 @@ export default function ProductShowcaseAI() {
     setInput('');
     setLoading(true);
 
-    // Önce yerel zekayı kontrol et
     const smartResponse = analyzeQuestion(userMessage);
 
     if (smartResponse) {
@@ -123,11 +106,10 @@ export default function ProductShowcaseAI() {
       return;
     }
 
-    // Cevap bulunamazsa genel bir cevap ver (API bağlantısı olmadığı için fallback)
     setTimeout(() => {
         setMessages(prev => [...prev, { 
             role: 'assistant', 
-            content: "Bu konuda detaylı bilgi için web sitemizi ziyaret edebilir veya whatsapp hattımızdan destek alabilirsiniz. Size ürünün temel özelliklerinden bahsedebilirim?" 
+            content: "Bu konuda daha detaylı bilgi için web sitemizi ziyaret edebilir veya WhatsApp hattımızdan bize ulaşabilirsiniz. Size ürünün temel özelliklerinden bahsedebilirim?" 
         }]);
         setLoading(false);
     }, 1000);
@@ -143,81 +125,74 @@ export default function ProductShowcaseAI() {
   return (
     <div className="flex flex-col h-screen bg-gray-50 overflow-hidden font-sans">
       
-      {/* 1. HEADER: Sade ve Güven Verici */}
+      {/* 1. HEADER - CLEAN & PREMIUM */}
       <div className="bg-white border-b px-4 py-3 flex items-center justify-between shadow-sm z-20">
         <div className="flex items-center gap-3">
+          {/* LOGO - FIXLENDİ */}
           <img
             src="/kalief-logo.jpg"
             alt="Kalief Logo"
-            className="w-16 h-16 object-contain flex-shrink-0"
-            onError={(e) => {
-              console.error("Logo yüklenemedi:", e.target.src);
-              e.target.style.display = 'none';
-            }}
+            className="h-10 w-auto object-contain"
           />
+          
           <div className="flex flex-col">
-            <span className="font-bold text-gray-900 leading-none">{storeConfig.storeName}</span>
+            <span className="font-bold text-gray-900 leading-none text-sm tracking-wide">{storeConfig.storeName}</span>
             <a 
                href={storeConfig.appLink} 
                target="_blank" 
                rel="noreferrer" 
-               className="text-xs text-gray-500 hover:text-black mt-1 flex items-center gap-1 transition-colors"
+               className="text-[10px] text-gray-500 hover:text-black mt-0.5 flex items-center gap-1 transition-colors uppercase tracking-wider"
             >
-              {storeConfig.website} <ExternalLink size={10} />
+              RESMİ MAĞAZA <ExternalLink size={10} />
             </a>
           </div>
         </div>
+        
+        {/* Sağ Taraf - Siteye Git Butonu */}
         <a
-          href="https://ty.gl/fovxcunmv9ke2"
+          href={storeConfig.appLink}
           target="_blank"
           rel="noreferrer"
-          className="bg-black text-white px-3 py-2 rounded-full text-xs font-semibold hover:bg-gray-800 transition flex items-center gap-1"
+          className="bg-black text-white px-4 py-2 rounded-full text-xs font-medium hover:bg-gray-800 transition flex items-center gap-2 shadow-lg shadow-black/10"
         >
-          Trendyol’da Görüntüle
+          Mağazaya Git
           <ExternalLink size={12} />
         </a>
       </div>
 
-      {/* 2. ORTA ALAN: Scroll Edilebilir */}
+      {/* 2. ORTA ALAN */}
       <div className="flex-1 overflow-y-auto bg-gray-50">
         
-        {/* A. HERO SECTION (RESİM GALERİSİ) - Sohbetten önce görünür */}
-        <div className="bg-white pb-6 rounded-b-3xl shadow-sm mb-4">
-            <div className="relative w-full h-[360px] bg-gray-50 group">
-                {/* Resim */}
+        {/* A. HERO SECTION - PRESTİJLİ GÖRÜNÜM */}
+        <div className="bg-white pb-4 rounded-b-[2rem] shadow-sm mb-4 overflow-hidden">
+            <div className="w-full h-auto max-h-[350px] bg-white flex justify-center items-center py-2">
                 <img 
-                    src={productImages[activeImage]} 
-                    alt="Ürün Görseli" 
-                    className="w-full h-full object-contain p-2"
+                    src={productImages[0]} 
+                    alt="SmartRelax Masaj Aleti" 
+                    className="w-full h-full object-contain" 
                 />
-                
-                {/* Yön Okları */}
-                <button onClick={prevImage} className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 p-1 rounded-full shadow hover:bg-white transition">
-                    <ChevronLeft size={20}/>
-                </button>
-                <button onClick={nextImage} className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 p-1 rounded-full shadow hover:bg-white transition">
-                    <ChevronRight size={20}/>
-                </button>
-                {/* Dots */}
-                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
-                    {productImages.map((_, idx) => (
-                        <div key={idx} className={`w-2 h-2 rounded-full transition-all ${activeImage === idx ? 'bg-black w-4' : 'bg-gray-300'}`} />
-                    ))}
-                </div>
             </div>
-            {/* Ürün Başlık ve Özet */}
-            <div className="px-5 mt-4">
-                <div className="flex justify-between items-start">
+
+            {/* Başlık ve Rozetler */}
+            <div className="px-5 mt-2">
+                <div className="flex justify-between items-end">
                     <div>
-                        <h1 className="text-xl font-bold text-gray-900">{storeConfig.productName}</h1>
-                        <p className="text-sm text-gray-500 mt-1">{storeConfig.model} • Profesyonel Bakım</p>
+                        <h1 className="text-xl font-bold text-gray-900 leading-tight">{storeConfig.productName}</h1>
+                        <p className="text-xs text-gray-500 mt-1 font-medium tracking-wide text-gray-400">{storeConfig.model} • PROFESSIONAL SERIES</p>
                     </div>
-                    <div className="text-right">
-                        <span className="block text-lg font-bold text-black">{storeConfig.price}</span>
-                        <span className="block text-[10px] text-green-600 font-medium bg-green-50 px-2 py-0.5 rounded-full mt-1">
-                            Ücretsiz Kargo
-                        </span>
-                    </div>
+                </div>
+                
+                {/* Özellik Rozetleri */}
+                <div className="flex gap-2 mt-4 overflow-x-auto no-scrollbar">
+                    <span className="text-[10px] font-semibold bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full flex items-center gap-1 whitespace-nowrap border border-gray-200">
+                        <ShieldCheck size={12} /> 1 Yıl Garanti
+                    </span>
+                    <span className="text-[10px] font-semibold bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full flex items-center gap-1 whitespace-nowrap border border-gray-200">
+                        <Star size={12} className="text-yellow-500 fill-yellow-500" /> Premium Kalite
+                    </span>
+                    <span className="text-[10px] font-bold text-green-700 bg-green-50 border border-green-100 px-3 py-1.5 rounded-full whitespace-nowrap">
+                        Ücretsiz Kargo
+                    </span>
                 </div>
             </div>
         </div>
@@ -227,11 +202,12 @@ export default function ProductShowcaseAI() {
           {messages.length === 0 ? (
              <div className="text-center py-6 animate-in fade-in slide-in-from-bottom-4">
                 <div className="w-12 h-12 bg-white border border-gray-200 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sm">
-                    <Sparkles className="text-yellow-500" size={24} />
+                    <Sparkles className="text-black" size={20} />
                 </div>
-                <p className="text-gray-600 text-sm max-w-xs mx-auto">
-                    Merhaba! 👋 Ben Kalief Asistanı.<br/>
-                    Aşağıdaki konularda size hemen yardımcı olabilirim.
+                <h3 className="text-sm font-bold text-gray-900 mb-1">Size Nasıl Yardımcı Olabilirim?</h3>
+                <p className="text-gray-500 text-xs max-w-xs mx-auto leading-relaxed">
+                    Merhaba! Ben Kalief Asistanı.<br/>
+                    Ürün özellikleri, kullanım detayları veya garanti süreci hakkında merak ettiklerinizi sorabilirsiniz.
                 </p>
              </div>
           ) : (
@@ -242,7 +218,7 @@ export default function ProductShowcaseAI() {
                       <Bot size={16} className="text-white" />
                     </div>
                   )}
-                  <div className={`max-w-[85%] p-3.5 rounded-2xl text-sm leading-relaxed shadow-sm whitespace-pre-line ${
+                  <div className={`max-w-[85%] p-4 rounded-2xl text-sm leading-relaxed shadow-sm whitespace-pre-line ${
                     msg.role === 'user' 
                       ? 'bg-black text-white rounded-tr-none' 
                       : 'bg-white text-gray-800 border border-gray-100 rounded-tl-none'
@@ -271,7 +247,7 @@ export default function ProductShowcaseAI() {
       </div>
 
       {/* 3. INPUT ALANI */}
-      <div className="bg-white border-t p-4 pb-6">
+      <div className="bg-white border-t p-4 pb-6 shadow-[0_-5px_15px_rgba(0,0,0,0.02)]">
         {/* Hızlı Sorular (Chips) */}
         <div className="flex gap-2 overflow-x-auto no-scrollbar mb-3 py-1">
           {quickQuestions.map((q, i) => (
@@ -293,7 +269,7 @@ export default function ProductShowcaseAI() {
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
             disabled={loading}
-            placeholder="Aklınıza takılanı sorun..."
+            placeholder="Sorunuzu yazın..."
             className="flex-1 p-3 bg-transparent border-none focus:ring-0 text-sm text-gray-900 placeholder:text-gray-400 outline-none"
           />
           <button
@@ -308,4 +284,3 @@ export default function ProductShowcaseAI() {
     </div>
   );
 }
-
